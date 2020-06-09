@@ -23,7 +23,7 @@ const Editer = (props) => {
                 <Form.Input fluid label='Title' placeholder='Title' value ={Title} onChange={onChange} />
             </Form.Group>
             <Form.TextArea label='Detail' placeholder='what should I do?' value= {Description} onChange={onChange}/>
-            <Button primary onClick={()=>props.edit({'title':Title,'description':Description,'id':props.id})}>Edit</Button>
+            <Button primary onClick={()=>props.edit({'title':Title,'description':Description,'id':props.data.id})}>Edit</Button>
             <Button secondary onClick={()=>props.changepage("list")}>Cancel</Button>
         </Form>
     );
