@@ -75,7 +75,7 @@ const App = props =>{
     const showpage = (param,arr) => {
         switch(hieris){
             case 'list' : return(
-                <div><Header size='huge' textAlign='center'>To Do List</Header>
+                <div><Header size='huge' textAlign='center'>To Do List2</Header>
                 <Button onClick={() => changepage('add')}>Add</Button><ListArr data={data} delate={delate} changepage={changepage} /></div>
             );
             case 'edit':return <Editer data={selected} edit={edit} changepage={changepage}/>;
