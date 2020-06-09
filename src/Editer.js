@@ -1,48 +1,32 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Form } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react'
 
 
 // <Editer data={this.state.data}  edit={this.edit} />
 
-class Editer extends React.Component { 
-    constructor(props){
-        super(props);
-        this.TitleRef = React.createRef();
-        this.DescriptionRef = React.createRef();
-        this.state={
-            title:this.props.data.title,
-            description:this.props.data.description,
-            id:this.props.data.id
-        }
-    }
+const Editer = (props) => {
+    const [Title,setTitle] = useState(props.data.title);
+    const [Description,setDescription] = useState(props.data.description);
 
-    onChange = (e) =>{
+    const onChange = (e) =>{
         if(e.target.placeholder==="Title"){
-            this.setState({
-                title: e.target.value
-            });
+            setTitle(e.target.value);
         }
         else{
-            this.setState({
-                description: e.target.value    
-            }); 
+            setDescription(e.target.value);
         }
     }
-    render(){
-console.log(this.state);
-        return (
+    return (
         <Form>
             <Form.Group widths='equal'>
-                <Form.Input fluid label='Title' placeholder='Title' value ={this.state.title} onChange={this.onChange} />
+                <Form.Input fluid label='Title' placeholder='Title' value ={Title} onChange={onChange} />
             </Form.Group>
-            <Form.TextArea label='Detail' placeholder='what should I do?' value= {this.state.description} onChange={this.onChange}/>
-            <Button primary onClick={()=>this.props.edit(this.state)}>Edit</Button>
-            <Button secondary onClick={()=>this.props.changepage("list")}>Cancel</Button>
+            <Form.TextArea label='Detail' placeholder='what should I do?' value= {Description} onChange={onChange}/>
+            <Button primary onClick={()=>props.edit({'title':Title,'description':Description,'id':props.data.id})}>Edit</Button>
+            <Button secondary onClick={()=>props.changepage("list")}>Cancel</Button>
         </Form>
     );
-    }
 }
-
 
 export default Editer;

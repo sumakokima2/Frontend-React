@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDom from 'react-dom';
 import { List } from 'semantic-ui-react';
 import { Header } from 'semantic-ui-react';
@@ -35,71 +35,57 @@ const ListArr = ({data,delate,changepage}) =>{
         );
 }
 
-class App extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            data:[{id:0,title:"title1",description:"aaaaaaaaa"},{id:1,title:"title2",description:"bbbbbbb"}],
-            selected:"",
-            hieris:"list"
-        }
+const App = props =>{
+    const [data,setdata] = useState([{id:0,title:"title1",description:"aaaaaaaaa"},{id:1,title:"title2",description:"bbbbbbb"}]);
+    const [selected,setSelected] = useState("");
+    const [hieris, sethieris] = useState("list");
+
+    const delate = (num) =>{
+        setdata(data.filter(item => item.id !== num));
+        sethieris("list");
+    }
+    const edit = (add) =>{
+        const arr = data.slice();
+        console.log(add);
+        arr[add.id] = add;
+        console.log(arr);
+        setdata(arr);
+        sethieris("list");
     }
 
-    delate = (num) =>{
-        const newarr = this.state.data.filter(item => item.id !== num);
-        this.setState({ data:newarr, hieris:"list"});
-    }
-
-    edit = (data) => {
-        const arr = this.state.data;
-        arr[data.id] = data;
-        console.log(data);
-
-        this.setState({
-            data:arr,
-            hieris:"list"
+    const add = (add) => {
+        const arr = data.slice();
+        const newarr = [...arr,add];
+        newarr.map((ar,index) =>{
+            ar.id = index;
         });
+        setdata(newarr);
+        sethieris("list");
     }
-
-    add = (data) => {
-        const arr = this.state.data.slice();
-        const newarr = [...arr,data];
-        newarr.map((data,index) =>{
-            data.id = index;
-        });
-        this.setState({ data:newarr, hieris:"list"});
-    }
-
-    changepage = (param,data) => {
+    const changepage = (param,arr) => {
         if(param==='edit'){
-            this.setState({
-                hieris:param,
-                selected:data
-            });
-            this.showpage(param);
+            setSelected(arr);
+            sethieris(param);
+            showpage(param);
         }
         else{
-            this.setState({hieris:param});
+            sethieris(param);
         }
     }
-
-    showpage(param,data){
-        switch(this.state.hieris){
+    const showpage = (param,arr) => {
+        switch(hieris){
             case 'list' : return(
-                <div><Header size='huge' textAlign='center'>To Do List</Header>
-                <Button onClick={() => this.changepage('add')}>Add</Button><ListArr data={this.state.data} delate={this.delate} changepage={this.changepage} /></div>
+                <div><Header size='huge' textAlign='center'>To Do List2</Header>
+                <Button onClick={() => changepage('add')}>Add</Button><ListArr data={data} delate={delate} changepage={changepage} /></div>
             );
-            case 'edit':return <Editer data={this.state.selected} edit={this.edit} changepage={this.changepage}/>;
-            case 'add' :return <Add id ={this.state.data.length} add={this.add} changepage={this.changepage}/>
+            case 'edit':return <Editer data={selected} edit={edit} changepage={changepage}/>;
+            case 'add' :return <Add id ={data.length} add={add} changepage={changepage}/>
 
         }
     }
-
-    render(){
-        return (<div>{ this.showpage("list") }</div>
-        );
-    }
-}
+    return (<div>{ showpage("list") }</div>
+    );
+} 
 
 ReactDom.render(
     <App />,
